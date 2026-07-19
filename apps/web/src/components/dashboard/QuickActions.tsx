@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   Sparkles,
   CalendarDays,
@@ -8,43 +9,48 @@ import {
 const actions = [
   {
     title: "Generate Daily Brief",
-    icon: <Sparkles className="h-5 w-5" />,
+    icon: <Sparkles className="h-4 w-4" />,
+    href: "/chat?prompt=Generate%20today's%20brief",
   },
   {
     title: "Open Calendar",
-    icon: <CalendarDays className="h-5 w-5" />,
+    icon: <CalendarDays className="h-4 w-4" />,
+    href: "/chat?prompt=Show%20today's%20meetings",
   },
   {
     title: "Ask Synora AI",
-    icon: <MessageSquare className="h-5 w-5" />,
+    icon: <MessageSquare className="h-4 w-4" />,
+    href: "/chat",
   },
   {
     title: "Connect Apps",
-    icon: <Link2 className="h-5 w-5" />,
+    icon: <Link2 className="h-4 w-4" />,
+    href: "/connect",
   },
 ];
 
 export default function QuickActions() {
   return (
-    <div className="rounded-3xl bg-white p-8 shadow-sm">
-      <h2 className="text-2xl font-bold text-slate-900">
+    <div className="rounded-3xl bg-slate-900/60 p-8 border border-slate-805/85 backdrop-blur-md">
+      <h2 className="text-xl font-bold text-slate-200">
         Quick Actions
       </h2>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         {actions.map((action) => (
-          <button
+          <Link
             key={action.title}
-            className="flex items-center gap-3 rounded-2xl border border-gray-200 p-4 text-left transition-all duration-200 hover:border-indigo-500 hover:bg-indigo-50"
+            href={action.href}
+            className="flex items-center gap-3 rounded-2xl border border-slate-800 bg-[#0f172a]/30 p-4 text-left transition-all duration-200 hover:border-indigo-500/60 hover:bg-slate-800/40"
           >
-            <div className="rounded-xl bg-indigo-100 p-3 text-indigo-600">
+            <div className="rounded-xl bg-indigo-950/60 border border-indigo-900/25 p-2.5 text-indigo-400">
               {action.icon}
             </div>
 
-            <span className="font-medium text-slate-900">
+            <span className="text-xs font-bold text-slate-350">
               {action.title}
             </span>
-          </button>
+          </Link>
         ))}
       </div>
     </div>

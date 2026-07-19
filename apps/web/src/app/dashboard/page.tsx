@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import { prisma } from "@/lib/prisma";
 
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import AIBrief from "@/components/dashboard/AIBrief";
@@ -15,16 +16,32 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
+  // Fetch connections directly on the server to prevent browser fetch waterfalls
+  const connections = await prisma.connectedAccount.findMany({
+    where: {
+      userId: session.user.id,
+    },
+  });
+
   return (
-    <main className="min-h-screen bg-slate-100">
-      <div className="mx-auto max-w-7xl space-y-8 p-8">
+    <main className="min-h-screen bg-transparent pt-24 pb-8 px-4 md:px-8">
+      <div className="mx-auto max-w-7xl space-y-6">
         <DashboardHeader user={session.user} />
 
-        <AIBrief />
-        <ConnectedApps />
-        <RecentActivity />
-        <QuickActions />
-        <AISuggestions />
+        <div className="grid gap-6 md:grid-cols-3">
+          {/* Main Brief & Actions taking 2 cols */}
+          <div className="space-y-6 md:col-span-2">
+            <AIBrief connections={connections} />
+            <RecentActivity />
+            <AISuggestions />
+          </div>
+
+          {/* Apps and Sidebar taking 1 col */}
+          <div className="space-y-6 md:col-span-1">
+            <ConnectedApps connections={connections} />
+            <QuickActions />
+          </div>
+        </div>
       </div>
     </main>
   );
